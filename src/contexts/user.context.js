@@ -11,7 +11,7 @@ export const UserContext = createContext({
   setCurrentUser: () => null,
 });
 
-function UserProvider({ children }) {
+export function UserProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
@@ -31,5 +31,3 @@ function UserProvider({ children }) {
     </UserContext.Provider>
   );
 }
-
-export default UserProvider;
