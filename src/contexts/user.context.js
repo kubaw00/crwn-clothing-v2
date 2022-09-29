@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useReducer, useEffect } from 'react';
 
 import { createContext } from 'react';
 import {
@@ -8,11 +8,31 @@ import {
 
 export const UserContext = createContext({
   currentUser: null,
-  setCurrentUser: () => null,
 });
 
+const ACTION_TYPES = {
+  SET_USER_ACTION: 'SET_USER_ACTION',
+};
+
+const userReducer = (state, action) => {
+  const { type, payload } = action;
+
+  switch (type) {
+    case ACTION_TYPES.SET_USER_ACTION:
+      return { ...state, currentUser: payload };
+    default:
+      throw new Error('Uncought error');
+  }
+};
+
 export function UserProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [{ currentUser }, dispatch] = useReducer(userReducer, {
+    currentUser: null,
+  });
+
+  const setCurrentUser = (user) => {
+    dispatch({ type: ACTION_TYPES.SET_USER_ACTION, payload: user });
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChangedListener((user) => {
@@ -25,8 +45,9 @@ export function UserProvider({ children }) {
 
     return unsubscribe;
   }, []);
+
   return (
-    <UserContext.Provider value={{ currentUser, setCurrentUser }}>
+    <UserContext.Provider value={{ currentUser }}>
       {children}
     </UserContext.Provider>
   );
