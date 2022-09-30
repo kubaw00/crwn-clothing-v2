@@ -14,7 +14,7 @@ const ACTION_TYPES = {
   SET_USER_ACTION: 'SET_USER_ACTION',
 };
 
-const userReducer = (state, action) => {
+export const userReducer = (state, action) => {
   const { type, payload } = action;
 
   switch (type) {
